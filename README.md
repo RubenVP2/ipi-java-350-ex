@@ -1,3 +1,4 @@
+[![Java CI with Maven](https://github.com/RubenVP2/ipi-java-350-ex/actions/workflows/maven.yml/badge.svg)](https://github.com/RubenVP2/ipi-java-350-ex/actions/workflows/maven.yml)
 # TP sur la qualité logicielle
 
 Exercices de Java, module 350 pour l'IPI. Il est nécessaire de forker ce repository pour pouvoir faire tout le TP !! Après chaque question, pusher vos modifications sur votre repository.
