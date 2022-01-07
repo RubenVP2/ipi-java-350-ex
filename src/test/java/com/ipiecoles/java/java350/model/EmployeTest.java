@@ -93,7 +93,8 @@ class EmployeTest {
             "2019-01-01, 1.0, 8",
             "2021-01-01, 0.5, 5",
             "2022-01-01, 1.0, 10",
-            "2032-01-01, 1.0, 11"
+            "2032-01-01, 1.0, 11",
+            "2016-01-01, 1.0, 9"
     })
     void testNbRTT(LocalDate dateAnnee, Double tempsPartiel, Integer result) {
         // Given
