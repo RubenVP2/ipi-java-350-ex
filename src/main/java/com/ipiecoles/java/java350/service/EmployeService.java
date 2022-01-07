@@ -67,7 +67,8 @@ public class EmployeService {
         //Calcul du salaire
         Double salaire = Entreprise.COEFF_SALAIRE_ETUDES.get(niveauEtude) * Entreprise.SALAIRE_BASE;
         if(tempsPartiel != null){
-            salaire = salaire * tempsPartiel;
+            // Salaire arrondi à 2 chiffre après la virgule
+            salaire = Math.round(salaire * tempsPartiel * 100.0) / 100.0;
         } else {
             LOGGER.warn("Temps partiel non renseigné lors de l'embauche de l'employé {} {}", nom, prenom);
         }

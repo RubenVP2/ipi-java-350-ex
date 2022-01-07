@@ -88,4 +88,22 @@ class EmployeTest {
         Assertions.assertThat(prime).isEqualTo(primeAttendue);
     }
 
+    @ParameterizedTest(name = "A l'annee {0}, pour un temps partiel de {1}, le nombre de RTT sera de => {3}")
+    @CsvSource({
+            "2019-01-01, 1.0, 8",
+            "2021-01-01, 0.5, 5",
+            "2022-01-01, 1.0, 10",
+            "2032-01-01, 1.0, 11",
+            "2016-01-01, 1.0, 9"
+    })
+    void testNbRTT(LocalDate dateAnnee, Double tempsPartiel, Integer result) {
+        // Given
+        Employe employe = new Employe();
+        employe.setTempsPartiel(tempsPartiel);
+        // When
+        Integer nbRtt = employe.getNbRtt(dateAnnee);
+        // Then
+        Assertions.assertThat(nbRtt).isEqualTo(result);
+    }
+
 }
