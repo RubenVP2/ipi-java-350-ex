@@ -62,20 +62,42 @@ public class Employe {
         return getNbRtt(LocalDate.now());
     }
 
-    public Integer getNbRtt(LocalDate d){
-        int i1 = d.isLeapYear() ? 365 : 366;
-        int var = 104;
-        switch (LocalDate.of(d.getYear(),1,1).getDayOfWeek()){
-        case THURSDAY: if(d.isLeapYear()) var =  var + 1; break;
-        case FRIDAY:
-        if(d.isLeapYear()) var =  var + 2;
-        else var =  var + 1;
-case SATURDAY:var = var + 1;
-                    break;
+    /**
+     * Calcul ne nombre de jours RTT =
+     * Nombre de jours dans l'année
+     * Plafond maximal du forfait jours
+     * Nombre de samedis et de dimanches
+     * Nombre de jours congés payés
+     * Nombre de jours féries != d'un week end
+     * @return le nombre de jours de RTT
+     */
+    public Integer getNbRtt(LocalDate anneeCourante) {
+        // Initialisation des variables
+        boolean estAnneeBissextile = anneeCourante.isLeapYear();
+        int nbJoursAnnee = estAnneeBissextile ? 366 : 365;
+        int nbJoursWeekEnd = 104;
+        // Ajout de jours week end en fonction du premier jours de l'année
+        switch (LocalDate.of(anneeCourante.getYear(), 1, 1).getDayOfWeek()) {
+            case THURSDAY:
+                if (estAnneeBissextile)
+                    nbJoursWeekEnd += 1;
+                break;
+            case FRIDAY:
+                if (estAnneeBissextile)
+                    nbJoursWeekEnd += 2;
+                else
+                    nbJoursWeekEnd += 1;
+                break;
+            case SATURDAY:
+                nbJoursWeekEnd = nbJoursWeekEnd + 1;
+                break;
+            default:
+                break;
         }
-        int monInt = (int) Entreprise.joursFeries(d).stream().filter(localDate ->
-                localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
-        return (int) Math.ceil((i1 - Entreprise.NB_JOURS_MAX_FORFAIT - var - Entreprise.NB_CONGES_BASE - monInt) * tempsPartiel);
+        // Récupère le nombre de jours féries qui ne sont pas pendant un week end et calcul le nb de jours RTT ( en fonction de son activité arrondi au supérieur  )
+        int nbJoursFeriesNonWeekEnd = (int) Entreprise.joursFeries(anneeCourante).stream().filter(localDate -> localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
+        int nbJoursRTT = nbJoursAnnee - Entreprise.NB_JOURS_MAX_FORFAIT - nbJoursWeekEnd - Entreprise.NB_CONGES_BASE - nbJoursFeriesNonWeekEnd;
+        return (int) Math.ceil(nbJoursRTT * tempsPartiel);
     }
 
     /**
